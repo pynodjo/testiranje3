@@ -17,7 +17,7 @@ sifra_to_coordinates = {feature['properties']['SIFRA']: feature['geometry']['coo
                         if 'geometry' in feature and 'coordinates' in feature['geometry']}
 
 # Read and process the Excel file
-df = pd.read_excel('EP_Export_Uredjaja.xlsx', skiprows=6)
+df = pd.read_excel('EP_Eksport_Uredjaja.xlsx', skiprows=6)
 df.columns = df.columns.str.strip()  # Trim blank spaces from column names
 
 # Remove duplicates
