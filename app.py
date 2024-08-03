@@ -4,6 +4,7 @@
 from flask import Flask, request, jsonify, render_template
 import json
 import pandas as pd
+import os
 
 app = Flask(__name__)
 
@@ -49,6 +50,8 @@ def get_coordinates_by_sifra():
             if coordinates:
                 url = create_google_maps_url(coordinates)
                 return jsonify({"url": url})
+            else:
+                return jsonify({"error": "Coordinates not found for SIFRA."}), 404
         except ValueError:
             return jsonify({"error": "Invalid SIFRA format."}), 400
     return jsonify({"error": "SIFRA not found."}), 404
@@ -63,7 +66,11 @@ def get_coordinates_by_serijski_broj():
             if coordinates:
                 url = create_google_maps_url(coordinates)
                 return jsonify({"url": url})
+            else:
+                return jsonify({"error": "Coordinates not found for SIFRA."}), 404
+        else:
+            return jsonify({"error": "SIFRA not found for SERIJSKI_BROJ."}), 404
     return jsonify({"error": "SERIJSKI_BROJ not found."}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
