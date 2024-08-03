@@ -5,8 +5,12 @@ from flask import Flask, request, jsonify, render_template
 import json
 import pandas as pd
 import os
+import logging
 
 app = Flask(__name__)
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Load the JSON file
 with open('data.json', 'r') as file:
@@ -44,9 +48,11 @@ def index():
 @app.route('/get_coordinates_by_sifra', methods=['POST'])
 def get_coordinates_by_sifra():
     sifra = request.form.get('sifra')
+    app.logger.debug(f'Received SIFRA: {sifra}')
     if sifra:
         try:
             coordinates = find_coordinates_by_sifra(int(sifra), sifra_to_coordinates)
+            app.logger.debug(f'Coordinates for SIFRA {sifra}: {coordinates}')
             if coordinates:
                 url = create_google_maps_url(coordinates)
                 return jsonify({"url": url})
@@ -59,10 +65,13 @@ def get_coordinates_by_sifra():
 @app.route('/get_coordinates_by_serijski_broj', methods=['POST'])
 def get_coordinates_by_serijski_broj():
     serijski_broj = request.form.get('serijski_broj')
+    app.logger.debug(f'Received SERIJSKI_BROJ: {serijski_broj}')
     if serijski_broj:
         sifra = find_sifra_by_serijski_broj(serijski_broj, serijski_broj_to_sifra)
+        app.logger.debug(f'SIFRA for SERIJSKI_BROJ {serijski_broj}: {sifra}')
         if sifra:
             coordinates = find_coordinates_by_sifra(sifra, sifra_to_coordinates)
+            app.logger.debug(f'Coordinates for SIFRA {sifra}: {coordinates}')
             if coordinates:
                 url = create_google_maps_url(coordinates)
                 return jsonify({"url": url})
