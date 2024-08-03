@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Coordinates</title>
+    <style>
+        button {
+            background-color: #87CEEB;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00BFFF;
+        }
+        .spacer {
+            height: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Pojedinačna pretraga</h1>
@@ -24,6 +40,10 @@
     </form>
     <div id="result-serijski_broj"></div>
 
+    <div class="spacer"></div>
+    <button onclick="window.location.reload();">Osvježi</button>
+    <div class="spacer"></div>
+
     <script>
         document.getElementById('sifra-form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -39,9 +59,9 @@
             .then(data => {
                 const resultDiv = document.getElementById('result-sifra');
                 if (data.url) {
-                    resultDiv.innerHTML = `<a href="${data.url}" target="_blank">Google Maps link: </a>`;
+                    resultDiv.innerHTML = `<a href="${data.url}" target="_blank">Google Maps link</a>`;
                 } else {
-                    resultDiv.textContent = 'Šifra mjernog mjesta nije pronađena u bazi podataka. Provjeriti sa Odjeljenjem za priključenja da li je mjerno mjesto ucrtano.';
+                    resultDiv.textContent = data.error;
                 }
             });
         });
@@ -62,10 +82,11 @@
                 if (data.url) {
                     resultDiv.innerHTML = `<a href="${data.url}" target="_blank">Google Maps link</a>`;
                 } else {
-                    resultDiv.textContent = 'Serijski broj nije pronađen u bazi podataka. Provjeriti sa Odjeljenjem za priključenja da li je mjerno mjesto ucrtano, te da li je izvršena zamjena brojila.';
+                    resultDiv.textContent = data.error;
                 }
             });
         });
     </script>
+    <p>Copyrights ED Mostar 2024</p>
 </body>
 </html>
